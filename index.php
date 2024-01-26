@@ -3,11 +3,11 @@
     include "layouts/nav_bar.php";
 
     require "dbconnect.php";
-
+    
     if(isset($_GET['cid'])){
         $cid = $_GET['cid'];
         // echo $cid;
-
+        
         $sql = "SELECT posts.*, categories.name as c_name, users.name as u_name  FROM posts INNER JOIN categories ON categories.id = posts.category_id INNER JOIN users ON users.id = posts.user_id WHERE posts.category_id = :cid";
 
         // echo $sql;
@@ -19,7 +19,7 @@
         // var_dump($posts);
     }else{
         $sql = "SELECT posts.*, categories.name as c_name, users.name as u_name  FROM posts INNER JOIN categories ON categories.id = posts.category_id INNER JOIN users ON users.id = posts.user_id";
-
+        
         // echo $sql;
         // $stmt = $conn->query($sql);
         $stmt = $conn->prepare($sql);
