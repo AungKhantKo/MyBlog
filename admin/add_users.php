@@ -1,12 +1,38 @@
 <?php
 
-    include "layouts/side_nav.php";
+    
     require "../dbconnect.php";
 
-    $sql = "SELECT *FROM users";
+    
+
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+    $name = $_POST ['name'];
+    $email = $_POST ['email'];
+    $password = $_POST ['password'];
+    $role = $_POST ['role'];
+    
+    // echo "$name and $email and $password and $category_id";
+
+    $sql = "INSERT INTO users (name,email,password,role) VALUES (:name, :email, :password, :role)";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':name', $name);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':role', $role);
+
     $stmt->execute();
-    $users = $stmt->fetchAll();
+
+    header("location: users.php");
+
+    } else {
+
+        include "layouts/side_nav.php";
+        $sql = "SELECT *FROM users";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $users = $stmt->fetchAll();
+
+    }
 ?>
 
 
@@ -42,16 +68,16 @@
                                 <input type="password" class="form-control" id="password" name="password">
                             </div>
                             <div class="mb-3">
-                                <label for="category_id" class="form-label">Roles</label>
-                                <select class="form-select" id="category_id" name="category_id" aria-label="Default select example">
+                                <label for="role" class="form-label">Roles</label>
+                                <select class="form-select" id="role" name="role" aria-label="Default select example">
                                     <option selected>Choose...</option>
-                                    <?php 
-                                        foreach ($users as $user) {
-                                    ?>
+                                    
 
-                                    <option value="<?= $user['id']?>"><?= $user['role'] ?></option>
+                                    <option value="Author">Author</option>
+                                    <option value="Admin">Admin</option>
 
-                                    <?php }?>
+
+                                    
                                 </select>
                             </div>                            
                             <div class="d-grid gap-2">

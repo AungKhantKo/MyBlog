@@ -1,25 +1,55 @@
 <?php
+    ini_set ('display_errors', 1);
+    ini_set ('display_startup_errors', 1); 
+    error_reporting (E_ALL);
 
-    include "layouts/side_nav.php";
+  
     require "../dbconnect.php";
 
-    $sql = "SELECT *FROM categories";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $categories = $stmt->fetchAll();
-    // var_dump($categories);
+    
     
    
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $title=$_POST['title'];
-        $category_id=$_POST['category_id'];
-        $description=$_POST['description'];
-        $user_id=2;
-        $image= $_FILES['image'];
+        $title = $_POST['title'];
+        $category_id = $_POST['category_id'];
+        $description = $_POST['description'];
+        $user_id = 2;
+        $image_array = $_FILES['image'];
         
-        echo "$title and $category_id and $user_id and $description";
-        print_r($image); 
+        // echo "$title and $category_id and $user_id and $description";
+        // print_r($image); 
+
+        // File upload;
+        if(isset($image_array) && $image_array['size'] > 0) {
+            $folder_name = 'images/';
+            $image_path = $folder_name.$image_array['name'];
+
+            $tmp_name = $image_array['tmp_name'];
+            move_uploaded_file($tmp_name,$image_path);
+
+        }
+
+        $sql = "INSERT INTO posts(title,image,user_id,category_id,description) VALUES (:title, :image_path, :user_id, :category_id, :description)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':image_path', $image_path);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':description', $description);
+
+        $stmt->execute();
+
+        header("location: posts.php");
     
+    } else{
+        include "layouts/side_nav.php";
+        $sql = "SELECT *FROM categories";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $categories = $stmt->fetchAll();
+        // var_dump($categories);
+    }
     
 ?>
 
