@@ -6,12 +6,19 @@
   
     require "../dbconnect.php";
 
-    
+    $id = $_GET['postID'];
+
+    $sql = "SELECT posts.*, categories.name as c_name, users.name as u_name FROM posts INNER JOIN categories ON categories.id = posts.category_id INNER JOIN users ON users.id = posts.user_id WHERE posts.id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    $post = $stmt->fetch(PDO::FETCH_ASSOC);
+    // var_dump($post);
+    // die();
     
    
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        // ထည့်လိုက်တဲ့ input data တွေကိုလက်ခံတာ
         $title = $_POST['title'];
         $category_id = $_POST['category_id'];
         $description = $_POST['description'];
@@ -58,25 +65,25 @@
         <main>
             <div class="container-fluid px-4">
              <div class="mt-3">
-                <h1 class="mt-4 d-inline">Posts</h1>
+                <h1 class="mt-4 d-inline">Edit Posts</h1>
                 <a href="posts.php" class="btn btn-lg btn-danger float-end">Cancel</a>
              </div>  
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                     <li class="breadcrumb-item active"><a href="posts.php">Posts</a></li>
-                    <li class="breadcrumb-item active">Posts</li>
+                    <li class="breadcrumb-item active">Edit Posts</li>
                 </ol>
                 
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Create Post
+                        Edit Post
                     </div>
                     <div class="card-body">
                         <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="title">
+                                <input type="text" class="form-control" id="title" name="title" value="<?= $post['title']?>">
                             </div>
                             <div class="mb-3">
                                 <label for="category_id" class="form-label">Categories</label>
@@ -86,22 +93,43 @@
                                         foreach ($categories as $category) {
                                     ?>
 
-                                    <option value="<?= $category['id']?>"><?= $category['name'] ?></option>
+                                    <option value="<?= $category['id']?>"<?php echo $post['category_id'] == $category['id'] ? 'selected' : ''?>><?= $category['name']?></option>
 
                                     <?php }?>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="image" class="form-label">Image</label>
-                                <input type="file" class="form-control" id="image" name="image">                    
+                                
+                                                    
+                            
+
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="image-tab" data-bs-toggle="tab" data-bs-target="#image-tab-pane" type="button" role="tab" aria-controls="image-tab-pane" aria-selected="true">Image</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="newimage-tab" data-bs-toggle="tab" data-bs-target="#newimage-tab-pane" type="button" role="tab" aria-controls="newimage-tab-pane" aria-selected="false">New Image</button>
+                                </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="image-tab-pane" role="tabpanel" aria-labelledby="image-tab" tabindex="0">
+                                        <img src="<?= $post['image']?>" class="my-3 w-50 h-50" alt="">
+                                        <input type="hidden" name="old_image" id="" value="<?= $post['image']?>">
+                                    </div>
+                                    <div class="tab-pane fade" id="newimage-tab-pane" role="tabpanel" aria-labelledby="newimage-tab" tabindex="0">
+                                        <input type="file" class="form-control my-3" id="image" name="image">
+                                    </div>
+        
+                                </div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea name="description" class="form-control" id="description"></textarea>               
+                                <textarea name="description" class="form-control" id="description"><?= $post['description']?></label></textarea>               
                             </div>
                             
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Create</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>

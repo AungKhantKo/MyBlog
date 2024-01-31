@@ -72,7 +72,7 @@
                                     <td>
 
                                         <a href="../detail.php?postID=<?= $post['id']?>" class="btn btn-sm btn-outline-primary" target="_blank">Details</a>
-                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                        <a href="edit_post.php?postID=<?= $post['id']?>" class="btn btn-sm btn-outline-warning" target="_blank">Edit</a>
                                         <button class="btn btn-sm btn-outline-danger delete" data-post_id=<?= $post['id']?> >Delete</button>
 
                                     </td>
