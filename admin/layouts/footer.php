@@ -42,6 +42,8 @@
                     let id= $(this).data("post_id");
                     console.log(id);
                     $('#postID').val(id);
+                    $('#catID').val(id);
+                    $('#userID').val(id);
                     $('#deletemodal').modal("show");
                 })
 

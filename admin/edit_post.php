@@ -22,11 +22,13 @@
         $title = $_POST['title'];
         $category_id = $_POST['category_id'];
         $description = $_POST['description'];
-        $user_id = 2;
+        $user_id = $_POST['user_id'];
+        $old_image = $_POST['old_image'];
         $image_array = $_FILES['image'];
         
         // echo "$title and $category_id and $user_id and $description";
-        // print_r($image); 
+        // print_r($image_array); 
+        // die();
 
         // File upload;
         if(isset($image_array) && $image_array['size'] > 0) {
@@ -36,10 +38,14 @@
             $tmp_name = $image_array['tmp_name'];
             move_uploaded_file($tmp_name,$image_path);
 
+        }else{
+            $image_path = $old_image;
         }
 
-        $sql = "INSERT INTO posts(title,image,user_id,category_id,description) VALUES (:title, :image_path, :user_id, :category_id, :description)";
+        // $sql = "INSERT INTO posts(title,image,user_id,category_id,description) VALUES (:title, :image_path, :user_id, :category_id, :description)";
+        $sql = "UPDATE posts SET title=:title, image = :image_path, user_id = :user_id, category_id = :category_id, description = :description WHERE id = :id";
         $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':image_path', $image_path);
         $stmt->bindParam(':user_id', $user_id);
@@ -91,7 +97,20 @@
                                     <option selected>Choose...</option>
                                     <?php 
                                         foreach ($categories as $category) {
+                                        // Tenary condition
+                                        // (Condition) ? (Statement1) ; (Statement2);
+                                        // echo $post['category_id'] == $category['id'] ? 'selected' : '';
+
+                                        // OR
+
+                                        // if ($post['category_id'] == $category['id']){
+                                        //     echo 'selected';
+                                        // }else{
+                                        //     echo'';
+                                        // }
+                                        // ae loo myo yail loo ya tl if else condition nk ma yail chin yin (tenary condition nk yail loo ya tl)
                                     ?>
+                                    
 
                                     <option value="<?= $category['id']?>"<?php echo $post['category_id'] == $category['id'] ? 'selected' : ''?>><?= $category['name']?></option>
 
@@ -127,6 +146,8 @@
                                 <label for="description" class="form-label">Description</label>
                                 <textarea name="description" class="form-control" id="description"><?= $post['description']?></label></textarea>               
                             </div>
+
+                            <input type="hidden" name="user_id" id="" value="<?= $post['user_id']?>">
                             
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Update</button>
