@@ -76,7 +76,7 @@
                                     <td><?= $user['created_at']?></td>
                                     <td>
 
-                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                        <a href="edit_users.php?userID=<?= $user['id']?>" class="btn btn-sm btn-outline-warning" target="_blank">Edit</a>
                                         <button class="btn btn-sm btn-outline-danger delete" data-post_id=<?= $user['id'] ?>>Delete</button>
 
                                     </td>

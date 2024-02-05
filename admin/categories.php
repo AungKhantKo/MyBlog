@@ -68,7 +68,7 @@
                                     <td><?= $category['name']?></td>
                                     <td>
 
-                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                        <a href="edit_category.php?catID=<?= $category['id'] ?>" class="btn btn-sm btn-outline-warning" target="_blank">Edit</a>
                                         <button class="btn btn-sm btn-outline-danger delete" data-post_id=<?= $category['id']?>>Delete</button>
 
                                     </td>

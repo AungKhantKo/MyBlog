@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    if(isset($_SESSION['user_id'])){
 
     include "layouts/side_nav.php";
 
@@ -561,6 +563,9 @@
                
 <?php
 
-    include "layouts/footer.php"
+    include "layouts/footer.php";
+    }else{
+        header('location: ../index.php');
+    }
 
 ?>
