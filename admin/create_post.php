@@ -3,7 +3,9 @@
     ini_set ('display_startup_errors', 1); 
     error_reporting (E_ALL);
 
-  
+    session_start();
+    if(isset($_SESSION['user_id'])){
+
     require "../dbconnect.php";
 
     
@@ -111,6 +113,9 @@
                 
 <?php
 
-    include "layouts/footer.php"
+    include "layouts/footer.php";
+    }else{
+        header('location: ../index.php');
+    }
 
 ?>

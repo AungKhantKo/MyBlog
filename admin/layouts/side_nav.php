@@ -63,10 +63,14 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Categories
                             </a>
+                            <?php
+                                if($_SESSION['user_role'] == 'Admin'){
+                            ?>
                             <a class="nav-link" href="users.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Users
                             </a>
+                            <?php } ?>
                             <a class="nav-link" href="tables.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables

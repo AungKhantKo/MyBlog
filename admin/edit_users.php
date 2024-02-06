@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+    if(isset($_SESSION['user_id']) && $_SESSION['user_role'] == 'Admin'){
     
     require "../dbconnect.php";
 
@@ -103,6 +105,10 @@
                 
 <?php
 
-    include "layouts/footer.php"
+    include "layouts/footer.php";
+
+    }else{
+        header('location: index.php');
+    }
 
 ?>
