@@ -19,7 +19,7 @@
     if($_SERVER['REQUEST_METHOD'] == "POST"){
     $name = $_POST ['name'];
     $email = $_POST ['email'];
-    $password = $_POST ['password'];
+    $password = sha1($_POST ['password']);
     $role = $_POST ['role'];
     
     // echo "$name and $email and $password and $role";

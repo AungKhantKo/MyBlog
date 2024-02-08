@@ -4,7 +4,7 @@
     
     if($_SERVER['REQUEST_METHOD'] == "POST"){
         $email = $_POST['email'];
-        $password = $_POST['password'];
+        $password = sha1($_POST['password']);
         // echo "$email and $password";
         // die();
 
